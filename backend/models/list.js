@@ -11,8 +11,11 @@ const listSchema = new mongoose.Schema(
       required: true,
     },
     completed: {
-      type: Boolean,
+      type: String,
       required: true,
+    },
+    image: {
+      type: String,
     },
     user: [
       {

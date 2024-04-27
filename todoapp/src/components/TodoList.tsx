@@ -2,7 +2,14 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { FaTrash, FaCheck, FaTimes, FaEdit } from "react-icons/fa";
+import {
+  FaTrash,
+  FaCheck,
+  FaTimes,
+  FaEdit,
+  FaClosedCaptioning,
+  FaDoorClosed,
+} from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
 const id = sessionStorage.getItem("id");
@@ -17,12 +24,13 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const TodoList = () => {
+const TodoList = ({ addNew }: { addNew: boolean }) => {
   const [todos, settodos] = useState<Array<any>>([]);
+  const [selectedTodo, setSelectedTodo] = useState<any>({});
   const [inputs, setInputs] = useState<{
     title: string;
     body: string;
-    completed: boolean;
+    completed: string;
     createdAt: string;
     updatedAt: string;
     user: Array<string>;
@@ -31,30 +39,43 @@ const TodoList = () => {
   }>({
     title: "",
     body: "",
-    completed: false,
+    completed: "",
     createdAt: "",
     updatedAt: "",
     user: [],
     _v: 0,
     _id: "",
   });
-
+  const baseUrl = "http://localhost:1000";
   const [open, setOpen] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
   const handleOpen = (todo: any) => {
     setOpen(true);
     setInputs(todo);
   };
   const handleClose = () => setOpen(false);
+  const handleImageOpen = (todo: any) => {
+    setImageOpen(true);
+    setSelectedTodo(todo);
+  };
+  const handleImageClose = () => {
+    setImageOpen(false);
+    setSelectedTodo({});
+  };
   const fetch = async () => {
     await axios
       .get(`http://localhost:1000/api/v2/getTasks/${id}`)
       .then((res: any) => {
-        settodos(res?.data);
+        if (res?.data?.length) {
+          settodos(res?.data);
+        } else {
+          settodos([]);
+        }
       });
   };
   useEffect(() => {
     fetch();
-  }, []);
+  }, [addNew]);
   const filteredTodos = useSelector((state: any) => {
     // const todos = state.todos;
     const filter = state.filter;
@@ -103,12 +124,12 @@ const TodoList = () => {
         toast.error("Something went wrong");
       });
   };
-  const complete = async (todo: any) => {
+  const complete = async (todo: any, change: string) => {
     await axios
       .put(`http://localhost:1000/api/v2/updateTask/${todo._id}`, {
         title: todo.title,
         body: todo.body,
-        completed: !todo.completed,
+        completed: change,
       })
       .then(() => {
         fetch();
@@ -119,13 +140,13 @@ const TodoList = () => {
         toast.error("Something went wrong");
       });
   };
-
   return (
     <ul>
       <li className="my-2 text-sm italic">All Your Notes Here...</li>
       <li className="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 py-2 gap-4">
         <div className="flex items-center">
           <span className="mr-4 w-12 text-gray-500">Key</span>
+          <span className="mr-4 w-12 text-gray-500">Image</span>
           <span className={`mr-4 w-28  text-gray-500 `}>Title</span>
           <span className={`mr-4  text-gray-500`}>Body</span>
         </div>
@@ -142,9 +163,12 @@ const TodoList = () => {
         >
           <div className="flex items-center">
             <span className="mr-4 w-12 text-gray-500">{index + 1}.</span>
+            <div className="mr-4 w-12" onClick={() => handleImageOpen(todo)}>
+              <img src={`${baseUrl}${todo.image}`} className="w-6 h-6" />
+            </div>
             <span
               className={`mr-4 w-28 ${
-                todo.completed ? "line-through text-gray-500" : ""
+                todo.completed === "1" ? "line-through text-gray-500" : ""
               }`}
             >
               {todo.title}
@@ -152,7 +176,7 @@ const TodoList = () => {
             <span> </span>
             <span
               className={`mr-4 ${
-                todo.completed ? "line-through text-gray-500" : ""
+                todo.completed === "1" ? "line-through text-gray-500" : ""
               }`}
             >
               {todo.body}
@@ -171,60 +195,70 @@ const TodoList = () => {
             >
               <FaEdit />
             </button>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <div className="flex items-center mb-4">
-                  <input
-                    id="title"
-                    name="title"
-                    className="flex-grow p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
-                    type="text"
-                    placeholder="Title"
-                    value={inputs.title}
-                    onChange={change}
-                  />
-                </div>
-                <div className="flex items-center mb-4">
-                  <input
-                    type="text"
-                    name="body"
-                    id="body"
-                    className="flex-grow p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
-                    placeholder="Body"
-                    value={inputs.body}
-                    onChange={change}
-                  />
-                  <button
-                    className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
-                    onClick={update}
-                  >
-                    <FaCheck size={20} />
-                  </button>
-                </div>
-              </Box>
-            </Modal>
-            {!todo.completed && (
+            {todo.completed === "0" && (
               <button
                 className="text-sm bg-green-500 text-white sm:px-2 px-1 py-1 rounded"
-                onClick={() => complete(todo)}
+                onClick={() => complete(todo, "1")}
               >
                 <FaCheck />
               </button>
             )}
-            {todo.completed && (
+            {todo.completed === "1" && (
               <button
                 className="text-sm bg-yellow-500 text-white sm:px-2 px-1 py-1 rounded"
-                onClick={() => complete(todo)}
+                onClick={() => complete(todo, "0")}
               >
                 <FaTimes />
               </button>
             )}
           </div>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div className="flex items-center mb-4">
+                <input
+                  id="title"
+                  name="title"
+                  className="flex-grow p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  type="text"
+                  placeholder="Title"
+                  value={inputs.title}
+                  onChange={change}
+                />
+              </div>
+              <div className="flex items-center mb-4">
+                <input
+                  type="text"
+                  name="body"
+                  id="body"
+                  className="flex-grow p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="Body"
+                  value={inputs.body}
+                  onChange={change}
+                />
+                <button
+                  className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+                  onClick={update}
+                >
+                  <FaCheck size={20} />
+                </button>
+              </div>
+            </Box>
+          </Modal>
+          <Modal
+            open={imageOpen}
+            onClose={handleImageClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <img src={`${baseUrl}${selectedTodo.image}`} />
+            </Box>
+          </Modal>
         </li>
       ))}
     </ul>

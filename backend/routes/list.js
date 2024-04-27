@@ -1,16 +1,30 @@
 const router = require("express").Router();
 const User = require("../models/user");
 const List = require("../models/list");
-router.post("/addTask", async (req, res) => {
+const multer = require("multer");
+const path = require("path");
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+var upload = multer({ storage: storage });
+router.post("/addTask", upload.single("image"), async (req, res) => {
   try {
     const { title, body, completed, id } = req.body;
     const existingUser = await User.findById(id);
-    console.log(req.file);
     if (existingUser) {
       const list = new List({
         title,
         completed,
         body,
+        image: "/uploads/" + req.file.filename,
         user: existingUser,
       });
       await list.save().then(() => res.status(200).json({ list }));
@@ -18,6 +32,7 @@ router.post("/addTask", async (req, res) => {
       existingUser.save();
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Something went wrong" });
   }
 });

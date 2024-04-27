@@ -5,6 +5,7 @@ require("./conn/conn");
 const auth = require("./routes/auth");
 const list = require("./routes/list");
 app.use(express.json());
+app.use(express.static("public"));
 app.use(cors());
 app.put("/", (req, res) => {
   res.send("Hello");
