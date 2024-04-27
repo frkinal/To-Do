@@ -1,22 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/user");
 const List = require("../models/list");
-var fs = require("fs");
-var path = require("path");
-var multer = require("multer");
-require("dotenv").config();
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "../uploads");
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.filename + "_" + Date.now() + ".png");
-    },
-  }),
-}).single("user_file");
-
-router.post("/addTask", upload, async (req, res) => {
+router.post("/addTask", async (req, res) => {
   try {
     const { title, body, completed, id } = req.body;
     const existingUser = await User.findById(id);

@@ -14,9 +14,6 @@ const listSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    image: {
-      type: String,
-    },
     user: [
       {
         type: mongoose.Types.ObjectId,
