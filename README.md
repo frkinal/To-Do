@@ -18,7 +18,5 @@ cd todoapp && yarn start
 
 ### To-Do
 
-<img width="927" alt="Screenshot 2024-04-27 at 21 14 04" src="https://github.com/frkinal/To-Do/assets/70931362/dafced08-caa4-4a70-a440-5d62d240c870">
-<img width="908" alt="Screenshot 2024-04-27 at 21 15 12" src="https://github.com/frkinal/To-Do/assets/70931362/140ae2b2-6a6a-414d-a3dd-508fe8357f15">
 <img width="977" alt="Screenshot 2024-04-27 at 21 15 50" src="https://github.com/frkinal/To-Do/assets/70931362/985bab9f-b175-4eb4-b9ad-3d0f2700b3be">
-
+<img width="908" alt="Screenshot 2024-04-27 at 21 15 12" src="https://github.com/frkinal/To-Do/assets/70931362/140ae2b2-6a6a-414d-a3dd-508fe8357f15">
