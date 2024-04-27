@@ -1,5 +1,4 @@
 import {
-  ADD_TODO,
   TOGGLE_TODO,
   REMOVE_TODO,
   MARK_COMPLETED,
@@ -12,10 +11,6 @@ import {
 export const login = (isLoggedIn: boolean) => ({
   type: LOGIN,
   payload: { isLoggedIn },
-});
-export const addTodo = (text: string) => ({
-  type: ADD_TODO,
-  payload: { text },
 });
 export const toggleTodo = (id: string) => ({
   type: TOGGLE_TODO,

@@ -2,14 +2,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import {
-  FaTrash,
-  FaCheck,
-  FaTimes,
-  FaEdit,
-  FaClosedCaptioning,
-  FaDoorClosed,
-} from "react-icons/fa";
+import { FaTrash, FaCheck, FaTimes, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
 const id = sessionStorage.getItem("id");

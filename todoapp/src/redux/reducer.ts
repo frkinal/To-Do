@@ -1,5 +1,4 @@
 import {
-  ADD_TODO,
   TOGGLE_TODO,
   REMOVE_TODO,
   MARK_COMPLETED,
@@ -22,14 +21,6 @@ const todoReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isLoggedIn: action.payload.isLoggedIn,
-      };
-    case ADD_TODO:
-      return {
-        ...state,
-        todos: [
-          ...state.todos,
-          { text: action.payload.text, completed: false },
-        ],
       };
     case TOGGLE_TODO:
       return {

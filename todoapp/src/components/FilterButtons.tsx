@@ -1,16 +1,12 @@
-// FilterButtons.jsx
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterTodos, markAllCompleted } from "../redux/actions";
-
+import { filterTodos } from "../redux/actions";
 const FilterButtons = () => {
   const dispatch = useDispatch();
   const currentFilter = useSelector((state: any) => state.filter);
-
   const handleFilter = (filter: any) => {
     dispatch(filterTodos(filter));
   };
-
   return (
     <div className="flex space-x-4 items-center">
       <select
@@ -25,5 +21,4 @@ const FilterButtons = () => {
     </div>
   );
 };
-
 export default FilterButtons;
