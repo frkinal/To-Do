@@ -14,7 +14,7 @@ cd todoapp && yarn start
 
 ### Login && Register
 
-<img width="938" alt="Screenshot 2024-04-27 at 17 21 30" src="https://github.com/frkinal/To-Do/assets/70931362/b87335d3-7288-42f7-be58-72653fd1e120">## Project Setp
+<img width="938" alt="Screenshot 2024-04-27 at 17 21 30" src="https://github.com/frkinal/To-Do/assets/70931362/b87335d3-7288-42f7-be58-72653fd1e120">
 
 ### To-Do
 
