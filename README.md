@@ -1,4 +1,4 @@
-## Project Setp
+## Project Setup
 
 ### Backend
 ```bash
